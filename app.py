@@ -223,10 +223,15 @@ def open_browser():
     webbrowser.open_new("http://127.0.0.1:5000/")
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     print("=" * 60)
-    print("  Deep Learning Explorer API")
-    print("  Running on: http://localhost:5000")
+    print(f"  Deep Learning Explorer API")
+    print(f"  Running on: http://localhost:{port}")
     print("=" * 60)
-    if not os.environ.get("WERKZEUG_RUN_MAIN"):
-        Timer(1, open_browser).start()
-    app.run(debug=True, port=5000)
+    
+    # Only open browser locally
+    if not os.environ.get("RENDER"):
+        if not os.environ.get("WERKZEUG_RUN_MAIN"):
+            Timer(1, open_browser).start()
+            
+    app.run(debug=True, host="0.0.0.0", port=port)
